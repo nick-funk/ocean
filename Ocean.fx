@@ -139,14 +139,15 @@ vertexOutput std_VS(appdata IN)
 			+ IN.Position.z * WaveDirection.y);
 	float3 offsetPosition = {0, waveLift, 0};
 	
-    result.WorldNormal = normalize(surfacePosition.xyz);
+	result.WorldNormal = normalize(surfaceSample);
     result.WorldTangent = mul(IN.Tangent,WorldITXf).xyz;
     result.WorldBinormal = mul(IN.Binormal,WorldITXf).xyz;
+	
 	result.WorldPosition = IN.Position.xyz + surfaceOffset + offsetPosition;
 	
     float4 Po = float4(result.WorldPosition, 1);
     float3 Pw = mul(Po,WorldXf).xyz;
-    result.LightVec = (SunPosition - Pw);
+    result.LightVec = SunPosition - Pw;
 	
     result.UV = surfacePosition;
 
@@ -160,10 +161,14 @@ float4 std_PS(vertexOutput IN) : COLOR
 {
 	float3 lightDirection = normalize(IN.LightVec);
 	float3 worldNormal = normalize(IN.WorldNormal);
+	float3 lookDirection = normalize(IN.WorldView);
+	
 	float diffuseAmount = dot(lightDirection, worldNormal);
-
 	float3 diffuseColor = tex2D(ColorSampler, IN.UV);
-	float3 result = 0.5 * diffuseColor + 0.5 * AmbientColor;
+	
+	float3 result = 
+		0.2 * AmbientColor
+		+ diffuseAmount * diffuseColor;
 	
     return float4(result,1);
 }

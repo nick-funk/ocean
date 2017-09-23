@@ -9,7 +9,7 @@
 		</contributor>
 		<created>2017-09-22T22:45:48Z</created>
 		<keywords>FXComposer, NVIDIA</keywords>
-		<modified>2017-09-23T22:11:25Z</modified>
+		<modified>2017-09-23T23:18:55Z</modified>
 		<subject/>
 		<title/>
 		<unit/>
@@ -19,11 +19,12 @@
 		<visual_scene id="DefaultScene" name="OceanScene">
 			<node id="Node1" name="Node1" layer="">
 				<matrix sid="">1 0 0 3.11656 0 1 0 3.61681 0 0 1 -0.909213 0 0 0 1</matrix>
-				<matrix sid="FXComposer2DiffMatrix">1 -5.13606e-008 0 0 0 1 0 5.27695 8.44796e-009 2.56803e-008 1 1.19209e-007 0 0 0 1</matrix>
+				<matrix sid="FXComposer2DiffMatrix">1 -1.9625e-007 2.55783e-008 15.0398 -9.3529e-008 1 -1.28402e-008 18.3576 4.24743e-008 3.85204e-008 1 6.25961 0 0 0 1</matrix>
 				<instance_light url="#PointLight" sid="Light" name="Sun"/>
 			</node>
 			<node id="Node6" name="Node6" layer="">
 				<matrix sid="">8.53736 0 0 3.24549 0 8.53736 0 1.82664 0 0 8.53736 1.08996 0 0 0 1</matrix>
+				<matrix sid="FXComposer2DiffMatrix">2.19485 0 0 0 0 2.19485 0 0 0 0 2.19485 0 0 0 0 1</matrix>
 				<instance_geometry url="#Plane3" sid="GeometryInstance5" name="OceanPlane">
 					<bind_material>
 						<technique_common>
@@ -141,25 +142,25 @@
 					<float>0.8</float>
 				</setparam>
 				<setparam ref="WorldITXf">
-					<float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+					<float4x4>0.340568 5.25257e-008 -6.56571e-009 0 -1.67724e-008 0.340568 -0 -0 0 0 0.340568 0 -6.18347 -7.48377 -1.82217 1</float4x4>
 				</setparam>
 				<setparam ref="WvpXf">
-					<float4x4>2.74748 0 0 0 0 2.74748 0 0 0 0 -1.00006 4.7446 0 0 -1 4.74525</float4x4>
+					<float4x4>5.79059 0.000179044 0.097407 32.515 0.0484996 7.52926 -2.8965 40.7333 0.0461272 -1.05445 -2.7402 19.2488 0.0461243 -1.05439 -2.74004 19.2511</float4x4>
 				</setparam>
 				<setparam ref="WorldXf">
-					<float4x4>1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</float4x4>
+					<float4x4>2.93627 0 0 18.1563 0 2.93627 0 21.9744 0 0 2.93627 5.35039 0 0 0 1</float4x4>
 				</setparam>
 				<setparam ref="ViewIXf">
-					<float4x4>1 0 -0 0 0 1 -0 0 0 0 1 4.74525 0 0 -0 1</float4x4>
+					<float4x4>0.999859 0.00601077 -0.0157085 1.28191 3.0087e-005 0.933302 0.359092 15.0499 0.0168193 -0.35904 0.933171 28.3607 -0 -0 -0 1</float4x4>
 				</setparam>
 				<setparam ref="SunPosition">
-					<float3>2 2 2</float3>
+					<float3>18.1563 21.9744 5.35039</float3>
 				</setparam>
 				<setparam ref="SunColor">
-					<float4>1 1 1 1</float4>
+					<float4>1 1 1 0</float4>
 				</setparam>
 				<setparam ref="Timer">
-					<float>0</float>
+					<float>3970.77</float>
 				</setparam>
 				<setparam ref="AmbientColor">
 					<float3>0 0.4 0.6</float3>
