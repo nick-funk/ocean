@@ -53,7 +53,6 @@
     </configuration>
   </configurations>
   <assetFile uri="Document1.dae" referenced="False" />
-  <assetFile uri="Document2.dae" referenced="False" />
   <activeAssetCollection uri="Document1.dae" />
   <customConfigurations>
     <FXComposer.Scene.Services.FXRenderPortService>
@@ -62,7 +61,7 @@
         <focallength>3.269439</focallength>
         <fov>40</fov>
         <zoomrect>0 0 1 1</zoomrect>
-        <viewtransform>1 0 0 0 0 5.960464E-08 -0.9999999 0 0 0.9999999 5.960464E-08 0 0 3.269439 0 1 </viewtransform>
+        <viewtransform>1 0 0 0 0 5.960463E-08 -0.9999998 0 0 0.9999998 5.960463E-08 0 0 3.269439 0 1 </viewtransform>
       </camera>
       <camera type="Front" scene="Document1.dae#DefaultScene">
         <focallength>3.269439</focallength>
@@ -74,13 +73,13 @@
         <focallength>3.269439</focallength>
         <fov>40</fov>
         <zoomrect>0 0 1 1</zoomrect>
-        <viewtransform>5.960464E-08 0 -0.9999999 0 0 1 0 0 0.9999999 0 5.960464E-08 0 3.269439 0 0 1 </viewtransform>
+        <viewtransform>5.960463E-08 0 -0.9999998 0 0 1 0 0 0.9999998 0 5.960463E-08 0 3.269439 0 0 1 </viewtransform>
       </camera>
       <camera type="Perspective" scene="Document1.dae#DefaultScene">
-        <focallength>30.11085</focallength>
+        <focallength>25.82657</focallength>
         <fov>40</fov>
         <zoomrect>0 0 1 1</zoomrect>
-        <viewtransform>-0.2247904 6.407894E-05 0.9744071 0 0.5879422 0.7974594 0.135582 0 -0.7770417 0.6033726 -0.1792988 0 -22.29203 17.46549 -2.117196 1 </viewtransform>
+        <viewtransform>0.1931112 1.278265E-05 -0.9811769 0 -0.4010227 0.9126627 -0.07891583 0 0.8954825 0.4087138 0.1762503 0 25.54876 11.15455 7.024923 1 </viewtransform>
       </camera>
       <renderPort name="Render" />
     </FXComposer.Scene.Services.FXRenderPortService>
