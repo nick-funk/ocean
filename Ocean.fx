@@ -4,7 +4,7 @@ float Script : STANDARDSGLOBAL
     string ScriptClass = "object";
     string ScriptOrder = "standard";
     string ScriptOutput = "color";
-    string Script = "Technique=Blinn?Main:Main10;";
+    string Script = "Technique=Blinn?Main10;";
 > = 0.8;
 
 float4x4 WorldITXf : WorldInverseTranspose < string UIWidget="None"; >;
@@ -38,23 +38,41 @@ float3 AmbientColor : Ambient
     string UIWidget = "Color";
 > = {0.07f,0.07f,0.07f};
 
-float Ks
+float SurfaceStep
 <
     string UIWidget = "slider";
-    float UIMin = 0.0;
-    float UIMax = 1.0;
-    float UIStep = 0.05;
-    string UIName =  "Specular";
-> = 0.4;
+    float UIMin = 0.01;
+    float UIMax = 0.5;
+    float UIStep = 0.01;
+    string UIName =  "Surface Step";
+> = 0.05;
 
-float Eccentricity
+float SurfaceFlowRate
 <
     string UIWidget = "slider";
-    float UIMin = 0.0;
-    float UIMax = 1.0;
-    float UIStep = 0.0001;
-    string UIName =  "Highlight Eccentricity";
-> = 0.3;
+    float UIMin = 0.001;
+    float UIMax = 0.01;
+    float UIStep = 0.001;
+    string UIName =  "Surface Flow Rate";
+> = 0.004;
+
+float SurfaceScale
+<
+    string UIWidget = "slider";
+    float UIMin = 0.1;
+    float UIMax = 2;
+    float UIStep = 0.1;
+    string UIName =  "Surface Scale";
+> = 0.5;
+
+float WaveScale
+<
+    string UIWidget = "slider";
+    float UIMin = 0.1;
+    float UIMax = 1;
+    float UIStep = 0.1;
+    string UIName =  "Wave Scale";
+> = 0.1;
 
 texture ColorTexture : DIFFUSE 
 <
@@ -98,19 +116,29 @@ vertexOutput std_VS(appdata IN)
 {
     vertexOutput result = (vertexOutput)0;
 	
-	float waveLift = 0.1 * sin(Timer + IN.Position.x + IN.Position.z);
+	float surfaceTime = Timer * SurfaceFlowRate;
+	float4 surfacePosition = 
+		{ 
+		  surfaceTime + IN.UV.x * SurfaceStep, 
+		  surfaceTime + IN.UV.y * SurfaceStep, 
+		  0, 
+		  0 
+		};
+	float3 surfaceOffset = SurfaceScale * tex2Dlod(ColorSampler, surfacePosition).rgb;
+	
+	float waveLift = WaveScale * sin(Timer + IN.Position.x + IN.Position.z);
 	float3 offsetPosition = {0, waveLift, 0};
 	
-    result.WorldNormal = mul(IN.Normal,WorldITXf).xyz;
+    result.WorldNormal = normalize(surfacePosition.xyz);
     result.WorldTangent = mul(IN.Tangent,WorldITXf).xyz;
     result.WorldBinormal = mul(IN.Binormal,WorldITXf).xyz;
-	result.WorldPosition = IN.Position.xyz + offsetPosition;
+	result.WorldPosition = IN.Position.xyz + surfaceOffset + offsetPosition;
 	
     float4 Po = float4(result.WorldPosition, 1);
     float3 Pw = mul(Po,WorldXf).xyz;
     result.LightVec = (SunPosition - Pw);
 	
-    result.UV = IN.UV.xy;
+    result.UV = surfacePosition;
 
     result.WorldView = normalize(ViewIXf[3].xyz - Pw);
     result.HPosition = mul(Po,WvpXf);
@@ -123,14 +151,9 @@ float4 std_PS(vertexOutput IN) : COLOR
 	float3 lightDirection = normalize(IN.LightVec);
 	float3 worldNormal = normalize(IN.WorldNormal);
 	float diffuseAmount = dot(lightDirection, worldNormal);
-	float3 diffuseColor = tex2D(ColorSampler,IN.UV).rgb;
-	
-	float3 red = {1, 0, 0};
-	float3 blue = {0, 0, 1};
-	
-	float t = sin(Timer + IN.WorldPosition.x + IN.WorldPosition.z);
-	
-	float3 result = (1 - t) * red + t * blue;
+
+	float3 diffuseColor = tex2D(ColorSampler, IN.UV);
+	float3 result = diffuseColor + AmbientColor;
 	
     return float4(result,1);
 }
@@ -160,18 +183,5 @@ technique10 Main10 < string Script = "Pass=p0;"; > {
         SetRasterizerState(DisableCulling);       
 		SetDepthStencilState(DepthEnabling, 0);
 		SetBlendState(DisableBlend, float4( 0.0f, 0.0f, 0.0f, 0.0f ), 0xFFFFFFFF);
-    }
-}
-
-technique Main < string Script = "Pass=p0;"; > {
-    pass p0 < string Script = "Draw=geometry;"; > 
-	{
-        VertexShader = compile vs_2_0 std_VS();
-		ZEnable = true;
-		ZWriteEnable = true;
-		ZFunc = LessEqual;
-		AlphaBlendEnable = false;
-		CullMode = None;
-        PixelShader = compile ps_2_a std_PS();
     }
 }
