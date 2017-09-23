@@ -36,7 +36,7 @@ float3 AmbientColor : Ambient
 <
     string UIName =  "Ambient Light";
     string UIWidget = "Color";
-> = {0.07f,0.07f,0.07f};
+> = {0.0f, 0.4f, 0.6f};
 
 float SurfaceStep
 <
@@ -73,6 +73,11 @@ float WaveScale
     float UIStep = 0.1;
     string UIName =  "Wave Scale";
 > = 0.1;
+
+float2 WaveDirection
+<
+    string UIName =  "Wave Direction";
+> = {1.0f, 1.0f};
 
 texture ColorTexture : DIFFUSE 
 <
@@ -119,14 +124,19 @@ vertexOutput std_VS(appdata IN)
 	float surfaceTime = Timer * SurfaceFlowRate;
 	float4 surfacePosition = 
 		{ 
-		  surfaceTime + IN.UV.x * SurfaceStep, 
-		  surfaceTime + IN.UV.y * SurfaceStep, 
+		  surfaceTime + IN.UV.x * SurfaceStep * WaveDirection.x, 
+		  surfaceTime + IN.UV.y * SurfaceStep * WaveDirection.y, 
 		  0, 
 		  0 
 		};
-	float3 surfaceOffset = SurfaceScale * tex2Dlod(ColorSampler, surfacePosition).rgb;
+	float3 surfaceSample = SurfaceScale * tex2Dlod(ColorSampler, surfacePosition).rgb;
+	float3 surfaceOffset = {0, surfaceSample.r, 0};
 	
-	float waveLift = WaveScale * sin(Timer + IN.Position.x + IN.Position.z);
+	float waveLift = 
+		WaveScale * sin(
+			Timer 
+			+ IN.Position.x * WaveDirection.x 
+			+ IN.Position.z * WaveDirection.y);
 	float3 offsetPosition = {0, waveLift, 0};
 	
     result.WorldNormal = normalize(surfacePosition.xyz);
@@ -153,7 +163,7 @@ float4 std_PS(vertexOutput IN) : COLOR
 	float diffuseAmount = dot(lightDirection, worldNormal);
 
 	float3 diffuseColor = tex2D(ColorSampler, IN.UV);
-	float3 result = diffuseColor + AmbientColor;
+	float3 result = 0.5 * diffuseColor + 0.5 * AmbientColor;
 	
     return float4(result,1);
 }
